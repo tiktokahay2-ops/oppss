@@ -1,0 +1,802 @@
+
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Berry Brat Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --gradient-primary: linear-gradient(135deg, #4188FF, #983DFF);
+      --gradient-secondary: linear-gradient(90deg, #983DFF, #4188FF);
+      --bg-dark: #0f172a;
+      --bg-darker: #020617;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --border-radius: 16px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-darker);
+      color: var(--text-primary);
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .main-content {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    .container, .form-container, .glass-card, .grid {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .section-title, .menu-link, .user-name, input, select {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .sidebar {
+      width: 280px;
+      height: 100vh;
+      background: var(--bg-dark);
+      padding: 24px 16px;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0; 
+      z-index: 100;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateX(-100%);
+    }
+
+    .sidebar.active {
+      transform: translateX(0);
+    }
+
+    .sidebar-header {
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar-logo {
+      font-size: 24px;
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+      padding: 0 16px;
+    }
+
+    .sidebar-menu::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar-menu::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar-menu::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+
+    .sidebar-menu::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .menu-section {
+      margin-bottom: 24px;
+    }
+
+    .menu-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .menu-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      padding-left: 16px;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      margin-bottom: 4px;
+      border-radius: var(--border-radius);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .menu-link:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .menu-link.active {
+      color: var(--text-primary);
+    }
+
+    .menu-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--gradient-secondary);
+      border-radius: var(--border-radius);
+    }
+
+    .menu-icon {
+      margin-right: 12px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: auto;
+      padding-bottom: 24px;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .user-profile:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      margin-right: 12px;
+      object-fit: cover;
+    }
+
+    .user-info {
+      flex: 1;
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .user-status {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .main-content {
+      flex: 1;
+      margin-left: 0;
+      padding: 24px;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius);
+      margin-bottom: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-title i {
+      margin-right: 12px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mobile-menu-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-size: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .mobile-menu-btn:hover i {
+      transform: rotate(90deg);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    }
+
+    .btn-glow {
+      box-shadow: 0 0 15px rgba(65, 136, 255, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .btn-glow:hover {
+      box-shadow: 0 0 25px rgba(65, 136, 255, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-glow-emerald {
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .btn-glow-emerald:hover {
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .animate-gradient {
+      background-size: 400% 400%;
+      animation: gradient 8s ease infinite;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    @keyframes floatGentle {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+      }
+      25% {
+        transform: translateY(-6px) scale(1.01);
+      }
+      50% {
+        transform: translateY(0) scale(1);
+      }
+      75% {
+        transform: translateY(-3px) scale(1.005);
+      }
+    }
+
+    @keyframes softGlow {
+      0%, 100% {
+        text-shadow: 0 0 10px rgba(65, 136, 255, 0.3), 
+                     0 0 20px rgba(152, 61, 255, 0.2);
+      }
+      50% {
+        text-shadow: 0 0 15px rgba(65, 136, 255, 0.5), 
+                     0 0 30px rgba(152, 61, 255, 0.4),
+                     0 0 40px rgba(152, 61, 255, 0.2);
+      }
+    }
+
+    .section-title.animated {
+      animation: softGlow 4s ease-in-out infinite;
+      display: inline-block;
+      will-change: transform, opacity, text-shadow;
+    }
+
+    .section-title.animated.looping {
+      animation: floatGentle 4.5s ease-in-out infinite, softGlow 4s ease-in-out infinite;
+    }
+
+    .marquee-container {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 32px;
+      padding: 0 8px;
+    }
+
+    @keyframes slideLeftInfinite {
+      0% {
+        transform: translateX(100%);
+        opacity: 0.8;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(-100%);
+        opacity: 0.8;
+      }
+    }
+
+    .section-subtitle.animated-marquee {
+      white-space: nowrap;
+      display: inline-block;
+      min-width: 100%;
+      animation: slideLeftInfinite 18s linear infinite;
+      will-change: transform;
+      padding-left: 100%;
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .section-subtitle.animated-marquee:hover {
+      animation-duration: 12s;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 250px;
+        height: 100vh;
+        top: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+      }
+
+      .main-content {
+        margin-left: 0;
+        padding: 8px;
+        min-height: 100vh;
+      }
+
+      .header {
+        padding: 8px 12px;
+        margin-bottom: 12px;
+      }
+
+      .header-title {
+        font-size: 14px;
+      }
+
+      .form-container .grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      .form-container .md\:col-span-2 {
+        grid-column: span 1 / span 1;
+      }
+
+      .form-container .glass-card {
+        padding: 12px !important;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
+      }
+
+      .form-container .h-72 {
+        height: 120px;
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .form-container input,
+      .form-container select {
+        padding: 8px !important;
+        font-size: 14px !important;
+      }
+
+      .form-container label {
+        font-size: 12px !important;
+        margin-bottom: 4px !important;
+      }
+
+      .form-container button {
+        padding: 8px 12px !important;
+        font-size: 14px !important;
+      }
+
+      .section-title {
+        font-size: 1.5rem !important;
+        padding: 0 4px !important;
+        margin-bottom: 0.5rem !important;
+      }
+
+      .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+        margin-top: calc(0.5rem * var(--tw-space-y-reverse));
+        margin-bottom: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+      }
+
+      .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+        margin-top: calc(1rem * var(--tw-space-y-reverse));
+        margin-bottom: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+      }
+
+      #info {
+        font-size: 12px !important;
+      }
+
+      #meta {
+        font-size: 10px !important;
+      }
+
+      .section-subtitle.animated-marquee {
+        animation-duration: 15s;
+        font-size: 13px;
+      }
+
+      .section-subtitle.animated-marquee:hover {
+        animation-duration: 0s;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2 class="sidebar-logo">Dashboard</h2>
+    </div>
+    
+    <div class="sidebar-menu">
+      <div class="menu-section">
+        <div class="menu-title">Main</div>
+        <a href="http://berryv4.blogspot.com/2025/09/cara-menggunakan-brat-generator.html" class="menu-link active">
+          <span class="menu-icon"><i class="fas fa-rocket"></i></span>
+          Tutorial Penggunaan
+        </a>
+        <a href="https://lynk.id/berrydev4" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-layer-group"></i></span>
+          Website Mod Mimin
+        </a>
+        <a href="https://lynk.id/berryv4" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-cart-shopping"></i></span>
+          Web Digital Product
+        </a>
+        <a href="https://buylink.id/berrystore" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-gem"></i></span>
+          Web Store Top Up
+        </a>
+        <a href="https://lynk.id/berryv4/page/google-drive-file" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-code"></i></span>
+          Get Source Code
+        </a>
+      </div>
+      
+      <div class="menu-section">
+        <div class="menu-title">Tools</div>
+        <a href="https://tweetberry.edgeone.app/" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-dove"></i></span>
+          Tweet Generator
+        </a>
+        <a href="https://fbcberry.edgeone.app/" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-message"></i></span>
+          Facebook Generator
+        </a>
+        <a href="https://ttdownberry.edgeone.app/" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-download"></i></span>
+          TikTok Downloader
+        </a>
+        <a href="https://igdownberry.edgeone.app/" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-download"></i></span>
+          Instagram Downloader
+        </a>
+        <a href="https://ytdownberry.edgeone.app/" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-download"></i></span>
+          YouTube Downloader
+        </a>
+        <a href="https://lynk.id/berryv4/zjwzdn5zez9p" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-users"></i></span>
+          Join VIP Member
+        </a>
+        <a href="#" class="menu-link" id="refreshBtn">
+          <span class="menu-icon"><i class="fas fa-sync-alt"></i></span>
+          Refresh
+        </a>
+      </div>
+
+      <div class="menu-section">
+        <div class="menu-title">Media Social</div>
+        <a href="https://whatsapp.com/channel/0029VbBLHVC1NCrPWnY9CD3L" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-square-phone"></i></span>
+          Saluran WhatsApp
+        </a>
+        <a href="https://t.me/berryv4" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-paper-plane"></i></span>
+          Saluran Telegram
+        </a>
+        <a href="https://www.youtube.com/@berryv4vfx" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-circle-play"></i></span>
+          Saluran YouTube
+        </a>
+        <a href="https://www.instagram.com/berry_v4?igsh=MXNxcXR2ZTZ3ZDBwbQ==" class="menu-link">
+          <span class="menu-icon"><i class="fas fa-camera"></i></span>
+          Instagram
+        </a>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <a href="https://lynk.id/berrydev4" class="user-profile">
+        <img src="https://i.supaimg.com/9dcfdacb-37d3-402f-88d3-6a5382cd68a9.png" alt="Profile" class="avatar">
+        <div class="user-info">
+          <div class="user-name">P44N Brat Generator</div>
+          <div class="user-status">Pro Version</div>
+        </div>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-content" id="mainContent">
+    <header class="header">
+      <div class="header-title">
+        <i class="fas fa-paper-plane"></i>
+       P44N BRAT TOOLS
+      </div>
+      <div class="header-actions">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="form-container">
+      <h1 class="section-title animated" style="font-size: 10rem; font-weight: 750; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-align: center; margin: 0 auto 1.5rem; letter-spacing: -0.5px; display: block; position: relative; padding: 0 20px; text-shadow: 0 0 25px rgba(65, 136, 255, 0.3);">
+        Welcome To Brat Generator
+      </h1>
+      <div class="marquee-container">
+        <p class="section-subtitle animated-marquee">Butuh Bantuan? Klik Logo Garis tiga diatas!</p>
+      </div>
+
+      <div class="glass-card rounded-3xl p-8 space-y-8 backdrop-blur-xl">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="md:col-span-2 space-y-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-200 mb-2">Teks</label>
+              <div class="relative">
+                <input id="textInput" type="text" 
+                  class="w-full p-4 bg-gray-800/50 border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  placeholder="Masukkan teks..." />
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <i class="fas fa-font text-gray-400"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-200 mb-2">Background</label>
+                <select id="bgSelect" class="w-full p-4 bg-gray-800/50 border border-gray-600/50 rounded-xl text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+                  <option value="white" selected>White</option>
+                  <option value="black">Black</option>
+                  <option value="green">Green</option>
+                  <option value="blue">Blue</option>
+                  <option value="red">Red</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-200 mb-2">Text Color</label>
+                <select id="colorSelect" class="w-full p-4 bg-gray-800/50 border border-gray-600/50 rounded-xl text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+                  <option value="black" selected>Black</option>
+                  <option value="white">White</option>
+                  <option value="green">Green</option>
+                  <option value="red">Red</option>
+                  <option value="blue">Blue</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex gap-4">
+              <button id="generateBtn"
+                class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-4 rounded-xl font-medium transition-all duration-300 btn-glow">
+                <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Generate
+              </button>
+              <button id="downloadBtn"
+                class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 py-4 rounded-xl font-medium transition-all duration-300 btn-glow-emerald">
+                <i class="fas fa-download mr-2"></i> Download
+              </button>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl border border-gray-700/50 p-5 flex flex-col items-center justify-center">
+            <div class="w-full h-72 flex items-center justify-center rounded-xl bg-gray-900/50 overflow-hidden border border-dashed border-gray-600/50">
+              <img id="preview" alt="Berry Brat Generator V2.jpg" class="max-h-full max-w-full object-contain hidden rounded-lg" />
+              <span id="placeholder" class="text-gray-500 text-sm flex items-center justify-center">
+                <i class="fas fa-image mr-2"></i> Belum ada preview
+              </span>
+            </div>
+            <div id="meta" class="w-full mt-4 text-xs text-gray-400 text-center truncate"></div>
+          </div>
+        </div>
+
+        <p id="info" class="text-center text-sm text-gray-400">Isi teks lalu tekan Generate.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const icon = mobileMenuBtn ? mobileMenuBtn.querySelector('i') : null;
+
+    if (mobileMenuBtn && sidebar && icon) {
+      mobileMenuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+
+        if (sidebar.classList.contains('active')) {
+          icon.classList.replace('fa-bars', 'fa-xmark');
+        } else {
+          icon.classList.replace('fa-xmark', 'fa-bars');
+        }
+      });
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', function() {
+      location.reload();
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const title = document.querySelector('.section-title');
+      if (title) {
+        title.classList.add('animated');
+        setTimeout(() => {
+          title.classList.add('looping');
+        }, 0);
+      }
+    });
+
+    const textInput = document.getElementById('textInput');
+    const bgSelect = document.getElementById('bgSelect');
+    const colorSelect = document.getElementById('colorSelect');
+    const generateBtn = document.getElementById('generateBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const preview = document.getElementById('preview');
+    const placeholder = document.getElementById('placeholder');
+    const info = document.getElementById('info');
+    const meta = document.getElementById('meta');
+
+    const API_BASE = 'https://api.zenzxz.my.id/api/maker/brat';
+
+    function buildUrl({ text, background, color }) {
+      const params = new URLSearchParams();
+      if (text) params.set('text', text);
+      if (background) params.set('background', background);
+      if (color) params.set('color', color);
+      return `${API_BASE}?${params.toString()}`;
+    }
+
+    async function generate() {
+      const text = textInput.value.trim();
+      if (!text) {
+        info.textContent = 'Failed! harap masukkan teks terlebih dahulu!';
+        info.classList.add('text-yellow-400');
+        info.classList.remove('text-gray-400', 'text-green-400', 'text-red-400');
+        return;
+      }
+
+      const url = buildUrl({
+        text,
+        background: bgSelect.value,
+        color: colorSelect.value
+      }) + '&_ts=' + Date.now();
+
+      preview.src = url;
+      preview.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+      meta.textContent = '';
+      info.textContent = 'Generating Image';
+      info.classList.add('text-blue-400');
+      info.classList.remove('text-gray-400', 'text-green-400', 'text-red-400');
+
+      preview.onload = () => {
+        info.textContent = 'Gambar berhasil dibuat. Klik Download untuk menyimpan.';
+        info.classList.add('text-green-400');
+        info.classList.remove('text-gray-400', 'text-blue-400', 'text-red-400');
+      };
+      preview.onerror = () => {
+        info.textContent = 'Gagal membuat gambar.';
+        info.classList.add('text-red-400');
+        info.classList.remove('text-gray-400', 'text-green-400', 'text-blue-400');
+        preview.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+      };
+    }
+
+    async function downloadImage() {
+      if (preview.classList.contains('hidden')) {
+        info.textContent = 'Belum ada gambar. Tekan Generate dulu.';
+        info.classList.add('text-yellow-400');
+        info.classList.remove('text-gray-400', 'text-green-400', 'text-red-400');
+        return;
+      }
+      const src = preview.src;
+      try {
+        const resp = await fetch(src);
+        const blob = await resp.blob();
+        const ext = blob.type.split('/')[1] || 'png';
+        const filename = `${sanitize(textInput.value)}_${Date.now()}.${ext}`;
+        const url = URL.createObjectURL(blob);
+        triggerDownload(url, filename);
+        URL.revokeObjectURL(url);
+        info.textContent = '⬇️ Download dimulai.';
+        info.classList.add('text-emerald-400');
+        info.classList.remove('text-gray-400', 'text-green-400', 'text-red-400');
+      } catch (err) {
+        info.textContent = 'Download otomatis gagal (CORS). Gambar dibuka di tab baru.';
+        info.classList.add('text-yellow-400');
+        info.classList.remove('text-gray-400', 'text-green-400', 'text-red-400');
+        window.open(src, '_blank');
+      }
+    }
+
+    function triggerDownload(url, filename) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    function sanitize(name) {
+      return (name || 'output').replace(/[<>:"/\\|?*\x00-\x1F]/g, '_');
+    }
+
+    generateBtn.addEventListener('click', generate);
+    downloadBtn.addEventListener('click', downloadImage);
+    textInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        generate();
+      }
+    });
+  </script>
+</body>
+</html>
